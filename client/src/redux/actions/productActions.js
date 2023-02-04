@@ -14,7 +14,7 @@ export const getProducts = () => async (dispatch) => {
                     ? error.message.response.data.message 
                     : error.message 
                     ? error.message 
-                    : 'An unexpected error has ocurred. Please try again later.'
+                    : 'Ha ocurrido un error inesperado. Por favor, inténtelo de nuevo más tarde.'
             )
         );
     }

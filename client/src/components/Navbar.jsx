@@ -20,7 +20,7 @@ import { ImStatsBars} from 'react-icons/im'
 
 
 const links = [
-    {linkName: 'Cursos', path: '/courses'},
+    {linkName: 'Cursos', path: '/products'},
     {linkName: 'Carrito', path: '/cart'}
 ]
 
