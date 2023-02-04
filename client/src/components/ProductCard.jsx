@@ -35,7 +35,7 @@ const ProductCard = ({ product }) => {
         shadow='lg'
         position='relative'>
 
-        {product.isNew && <Circle size='10px'position='absolute' top={2} right={2} bg='green.300' />}
+        {product.productIsNew && <Circle size='10px'position='absolute' top={2} right={2} bg='green.300' />}
         {product.stock <= 0 && <Circle size='10px' position='absolute' top={2} right={2} bg='red.200'/>}
         <Image src={product.image} alt={product.name} rounded='lg'/>
         <Box flex='1' maxH='5' alignItems='baseline'>
@@ -44,7 +44,7 @@ const ProductCard = ({ product }) => {
                     No Disponible
                 </Badge>
             )}
-            {product.isNew && (
+            {product.productIsNew && (
                 <Badge rounded='full' px='2' font-size='0.8em' colorScheme='green'>
                     Disponible
                 </Badge>
