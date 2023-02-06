@@ -9,10 +9,12 @@ node_modules/
 
 # testing
 /coverage
+/client/src/client_id.js
 
 # production
 /build
 images/
+
 # misc
 .DS_Store
 .env.local
