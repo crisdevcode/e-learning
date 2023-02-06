@@ -1,14 +1,15 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
 
 export const initialState = {
   loading: false,
   error: null,
-  userInfo: JSON.parse(localStorage.getItem('userInfo')) ?? null,
+  userInfo: JSON.parse(localStorage.getItem("userInfo")) ?? null,
   updateSuccess: false,
+  orders: [],
 };
 
 export const userSlice = createSlice({
-  name: 'user',
+  name: "user",
   initialState,
   reducers: {
     setLoading: (state) => {
@@ -37,11 +38,15 @@ export const userSlice = createSlice({
     resetUpdate: (state) => {
       state.updateSuccess = false;
     },
+    setUserOrders: (state, { payload }) => {
+      state.error = null;
+      state.orders = payload;
+      state.loading = false;
+    },
   },
 });
 
-export const { setLoading, setError, userLogin, userLogout, updateUserProfile, resetUpdate } =
-  userSlice.actions;
+export const { setLoading, setError, userLogin, userLogout, updateUserProfile, resetUpdate, setUserOrders } = userSlice.actions;
 export default userSlice.reducer;
 
 export const userSelector = (state) => state.user;
