@@ -21,7 +21,7 @@ jobs:
   back-deploy:
     runs-on: ubuntu-18.04
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v2
     - uses: akhileshns/heroku-deploy@v3.12.12 # This is the action
       with:
         heroku_api_key: ${{secrets.HEROKU_API_KEY}}
@@ -31,7 +31,7 @@ jobs:
   front-deploy:
     runs-on: ubuntu-18.04
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v2
       - uses: amondnet/vercel-action@v20 #deploy
         with:
           vercel-token: ${{ secrets.VERCEL_TOKEN }} # Required
