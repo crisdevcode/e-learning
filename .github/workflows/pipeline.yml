@@ -1,42 +1,67 @@
-name: MERN Stack Application Deploy Workflow
+name: Deployment Pipeline
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize]
 
-jobs: 
-  build:
+jobs:
+
+  avoid_reduncy:
     runs-on: ubuntu-18.04
     steps:
-    - uses: actions/checkout@v3
-    - uses: actions/setup-node@v3
-      with:
-        node-version: 16
-    - name: install dependendencies
-      run: npm install
-      env:
-        CI: true
-        
-  back-deploy:
-    runs-on: ubuntu-18.04
-    steps:
-    - uses: actions/checkout@v2
-    - uses: akhileshns/heroku-deploy@v3.12.12 # This is the action
-      with:
-        heroku_api_key: ${{secrets.HEROKU_API_KEY}}
-        heroku_app_name: ${{secrets.HEROKU_APP_NAME}} #Must be unique in Heroku
-        heroku_email: ${{secrets.HEROKU_EMAIL}}
+      - name: Cancel Previous Redundant Builds
+        uses: styfle/cancel-workflow-action@0.9.1
+        with:
+          access_token: ${{ github.token }}
 
-  front-deploy:
+  lint:
     runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@v2
-      - uses: amondnet/vercel-action@v20 #deploy
         with:
-          vercel-token: ${{ secrets.VERCEL_TOKEN }} # Required
-          github-token: ${{ secrets.GITHUB_TOKEN }} #Optional 
-          vercel-args: '--prod' #Optional
-          vercel-org-id: ${{ secrets.ORG_ID}}  #Required
-          vercel-project-id: ${{ secrets.PROJECT_ID}} #Required 
-          working-directory: client
+          fetch-depth: 0
+      - uses: actions/setup-node@v2
+        with:
+          cache: 'npm'
+          node-version: '14'
+      - name: Install dependencies
+        run: npm ci
+
+  build:
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v2
+        with:
+          cache: 'npm'
+          node-version: '14'
+      - name: Install dependencies
+        run: npm ci
+      - name: Build
+        run: npm run build
+      - uses: actions/upload-artifact@v2
+        with:
+          name: dist
+          path: dist
+
+  deploy:
+    needs: [test, e2e]
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Deploy to Heroku
+        if: ${{ github.event_name == 'push' }}
+        uses: akhileshns/heroku-deploy@v3.12.12
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: ${{secrets.HEROKU_APP}}
+          heroku_email: ${{secrets.HEROKU_API_EMAIL}}
+          healthcheck: "https://${{secrets.HEROKU_APP}}.herokuapp.com/health"
+          rollbackonhealthcheckfailed: true
