@@ -1,12 +1,14 @@
 name: MERN Stack Application Deploy Workflow
 
-on: 
+on:
   push:
-    branches: [main]
-  
-  jobs: 
-   runs-on: ubuntu-latest
-   steps:
+    branches:
+      - main
+
+jobs: 
+  build:
+    runs-on: ubuntu-18.04
+    steps:
     - uses: actions/checkout@v3
     - uses: actions/setup-node@v3
       with:
@@ -17,7 +19,7 @@ on:
       env:
         CI: true
   deploy:
-    runs-on: ubuntu-ubuntu-latest
+    runs-on: ubuntu-18.04
     steps:
     - uses: actions/checkout@v2
     - uses: akhileshns/heroku-deploy@v3.12.12 # This is the action
@@ -25,4 +27,4 @@ on:
         heroku_api_key: ${{secrets.HEROKU_API_KEY}}
         heroku_app_name: ${{secrets.HEROKU_APP_NAME}} #Must be unique in Heroku
         heroku_email: ${{secrets.HEROKU_EMAIL}}
-
+        
