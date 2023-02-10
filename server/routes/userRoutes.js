@@ -27,7 +27,6 @@ const loginUser = asyncHandler(async (req, res) => {
     });
   } else {
     res.status(401).send("Correo electrónico o contraseña no válidos");
-    throw new Error("Usuario no encontrado.");
   }
 });
 
@@ -53,11 +52,9 @@ const registerUser = asyncHandler(async (req, res) => {
       email: user.email,
       isAdmin: user.isAdmin,
       token: genToken(user._id),
-      createdAt: user.createdAt,
     });
   } else {
     res.status(400).send("No pudimos registrarte.");
-    throw new Error("Algo salió mal. Por favor revisa tus datos y vuelve a intentarlo.");
   }
 });
 
