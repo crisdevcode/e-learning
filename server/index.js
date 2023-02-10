@@ -1,7 +1,7 @@
 import dotenv from "dotenv";
+import connectToDatabase from "./database.js";
 dotenv.config();
 
-import connectToDatabase from "./database.js";
 import express from "express";
 import path from "path";
 
@@ -19,7 +19,7 @@ app.use("/api/products", productRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/orders", orderRoutes);
 
-app.get('api/config/paypal', (req, res) => res.send(process.env.PAYPAL_CLIENT_ID));
+app.get('/api/config/paypal', (req, res) => res.send(process.env.PAYPAL_CLIENT_ID));
 
 const port = process.env.PORT || 5000;
 
